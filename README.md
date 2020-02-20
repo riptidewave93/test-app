@@ -11,7 +11,7 @@ sudo pip3 install -r ./requires.txt
 
 We use pytests to verify that our app works as expected
 ```
-py.test
+py.test -v
 ```
 
 Manually verifying:
