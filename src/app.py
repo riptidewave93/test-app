@@ -7,6 +7,12 @@ import os
 
 app = Flask(__name__)
 
+def lang(input):
+    if input == "es":
+        return "Hola"
+    else:
+        return "Hello"
+
 # Configure logging as needed
 app.config["LOG_LEVEL"] = os.environ.get("DEBUG")
 log = logging.getLogger('werkzeug')
@@ -15,10 +21,16 @@ if app.config["LOG_LEVEL"]:
 else:
     log.setLevel(logging.ERROR)
 
-@app.route('/', methods=["GET", "POST"])
-def hello_world():
-    # Define our payload
-    data = "Hello, World"
+@app.route('/<name>', methods=["GET", "POST"])
+def hello_world(name):
+
+    # See if we are requesting a language arg
+    if 'lang' in request.args:
+        greeting = lang(request.args['lang']);
+    else:
+        greeting = lang(None);
+
+    data = f"{greeting} {name}!"
 
     # Parse for the accept header to be type application/json if it exists
     try:
@@ -31,10 +43,10 @@ def hello_world():
     if request.method == 'GET':
         # Configure your response based on what we got
         if accept_header == "application/json":
-            return jsonify(message=data)
+            return jsonify(msgs=[data])
         else:
-            return f"<p>{data}</p>"
+            return f"{data}"
     else:
         # Homework problem did not define how we wanted to handle a POST,
         # defaulting to returning hello world for now
-        return f"<p>{data}</p>"
+        return f"<p>{greeting} {name}</p>"
