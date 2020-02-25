@@ -6,6 +6,7 @@ import logging
 import os
 
 app = Flask(__name__)
+app.run(host='0.0.0.0')
 
 def lang(input):
     if input == "es":
